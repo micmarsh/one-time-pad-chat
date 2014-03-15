@@ -3,10 +3,11 @@
 
 (defn add-padding [padding message]
     (let [length (count message)
-          padding (drop length padding)]
-        (concat message padding)))
+          pad (drop length padding)]
+        (concat message pad)))
 
 (defn remove-padding [pad msg]
+  (println "pad:" pad \n "message:" msg)
   (loop [padding (reverse pad) 
          message (reverse msg)]
     (if (= (first padding) (first message))

@@ -1,11 +1,10 @@
 (ns otpclj.core
     (:use [crypto.random :only [base64]]
           [otpclj.encrypt :only [otp]]
-          [otpclj.utils :only [to-ints]]
           [otpclj.padding :only [add-padding remove-padding]]))
 
-(def KEY (-> 200 base64 to-ints))
-(def PADDING (-> 200 base64 to-ints))
+(def KEY (base64 200))
+(def PADDING (base64 200))
 
 (def encrypt (partial otp KEY))
 (def decrypt encrypt)
@@ -15,7 +14,7 @@
 
 (defn -main []
     (let [message (read-line)
-          encrypted (encrypt message)
+          encrypted (-> message pad encrypt)
           decrypted (-> encrypted decrypt unpad)]
         (println "your message:" message)
         (println "encrypted:" encrypted)
