@@ -2,7 +2,7 @@
 
 [One Time Pads](https://en.wikipedia.org/wiki/One_time_pad) are super cool, but not very practical. This project aims to be super cool, and mildly practical.
 
-IDK crypto in any real sense, so don't you shouldn't this to chat with your homies Julian, Edward, or Glenn.
+IDK crypto in any real sense, so don't you shouldn't this to chat with your homies Julian, Edward, Glenn, or anyone else as cool as them.
 
 ## License
 
