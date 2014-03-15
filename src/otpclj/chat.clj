@@ -14,8 +14,8 @@
               decrypt (comp unpad encrypt-base)
 
               message (read-line)
-              encrypted (-> message pad encrypt)
-              decrypted (-> encrypted decrypt unpad)]
+              encrypted (encrypt message)
+              decrypted (decrypt encrypted)]
             (println "your message:" message)
             (println "encrypted:" encrypted)
             (println "decrypted:" decrypted)
