@@ -2,28 +2,27 @@
     (:use [otpclj.constants :only [KEYS PADDINGS]]
           [otpclj.encrypt :only [otp]]
           [otpclj.padding :only [add-padding remove-padding]]
+          [otpclj.generate :only [generate-constants]]
           [clojure.tools.cli :only [parse-opts]]))
 
-(defn main-loop []
-    (loop [keys KEYS
-           paddings PADDINGS]
-        (if (empty? keys)
-            (println "you're all out of encryption keys!")
-            (let [current-padding (first paddings)
-                  pad (partial add-padding current-padding)
-                  unpad (partial remove-padding current-padding)
+(defn main-loop [keys paddings]
+    (if (empty? keys)
+        (println "you're all out of encryption keys!")
+        (let [current-padding (first paddings)
+              pad (partial add-padding current-padding)
+              unpad (partial remove-padding current-padding)
 
-                  encrypt-base (partial otp (first keys))
-                  encrypt (comp encrypt-base pad)
-                  decrypt (comp unpad encrypt-base)
+              encrypt-base (partial otp (first keys))
+              encrypt (comp encrypt-base pad)
+              decrypt (comp unpad encrypt-base)
 
-                  message (read-line)
-                  encrypted (-> message pad encrypt)
-                  decrypted (-> encrypted decrypt unpad)]
-                (println "your message:" message)
-                (println "encrypted:" encrypted)
-                (println "decrypted:" decrypted)
-                (recur (rest keys) (rest paddings))))))
+              message (read-line)
+              encrypted (-> message pad encrypt)
+              decrypted (-> encrypted decrypt unpad)]
+            (println "your message:" message)
+            (println "encrypted:" encrypted)
+            (println "decrypted:" decrypted)
+            (recur (rest keys) (rest paddings)))))
 
 (def parse-int #(Integer/parseInt %))
 
@@ -44,7 +43,7 @@
 (def parse-args #(parse-opts % cli-options))
 
 (defn -main [& args]
-  (let [options (parse-args args)]
-    (if (generate? options)
-      (println "time to generate!")
-      (main-loop))))
+  (let [arguments (parse-args args)]
+    (if (generate? arguments)
+      (-> arguments :options generate-constants prn)
+      (main-loop KEYS PADDINGS))))

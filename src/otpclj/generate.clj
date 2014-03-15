@@ -1,12 +1,7 @@
-(ns otpclj.generate)
+(ns otpclj.generate
+    (:use [crypto.random :only [base64]]))
 
-; Need to generate both a fake set of keys AND a fake set of padding, just to be safe
-; since having a single padding for use across all instances means they'll always be able
-; to decode everything up to the first x letters of your shortest message. Keeping it random
-; here also just seems helpful
-
-(def key-length 10)
-(def max-messages 100)
+; TODO hook up to random.org like a baws
 
 (defn fake-constants [n key-length]
     (let [element (base64 key-length)]
@@ -15,9 +10,9 @@
             (cons (base64 key-length) 
                 (lazy-seq (fake-constants (dec n) key-length))))))
 
-(def keys (fake-constants max-messages key-length))
-(def paddings (fake-constants max-messages key-length)
-
-(def FILE_NAME "keys.txt")
-
-(defn generate-constants [& [options]])
+(defn generate-constants [options]
+    (let [{:keys [max-messages message-length]} options
+          keys (fake-constants max-messages message-length)
+          paddings (fake-constants max-messages message-length)]
+        {:keys (vec keys)
+         :paddings (vec paddings)}))
