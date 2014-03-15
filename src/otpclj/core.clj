@@ -1,6 +1,5 @@
 (ns otpclj.core
-    (:use [otpclj.constants :only [KEYS PADDINGS]]
-          [otpclj.chat :only [main-loop]]
+    (:use [otpclj.chat :only [main-loop]]
           [otpclj.generate :only [generate-constants]]
           [clojure.tools.cli :only [parse-opts]]))
 
@@ -17,13 +16,31 @@
     :default "keys.txt"]
   ])
 
+(def parse-args #(parse-opts % cli-options))
+
 (defn generate? [{:keys [arguments]}]
     (some #{"generate"} arguments))
 
-(def parse-args #(parse-opts % cli-options))
+(defn read-file [name]
+  (-> name slurp read-string))
+
+(defn file-to-args [name]
+  (let [things (read-file name)]
+    [(:keys things) (:paddings things)]))
+
+(defn start-chat [options]
+  (try
+    (let [filename (:file options)
+          loop-args (file-to-args filename)]
+        (apply main-loop loop-args))
+    (catch java.io.FileNotFoundException e 
+        (println 
+          (str "The the file \"" 
+            (:file options) "\" doesn't exist")))))
 
 (defn -main [& args]
-  (let [arguments (parse-args args)]
+  (let [arguments (parse-args args)
+        options (:options arguments)]
     (if (generate? arguments)
-      (-> arguments :options generate-constants prn)
-      (main-loop KEYS PADDINGS))))
+      (-> options generate-constants prn)
+      (start-chat options))))
