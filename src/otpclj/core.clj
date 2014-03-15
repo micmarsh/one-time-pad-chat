@@ -6,11 +6,13 @@
 (def KEY (base64 200))
 (def PADDING (base64 200))
 
-(def encrypt (partial otp KEY))
-(def decrypt encrypt)
 
 (def pad (partial add-padding PADDING))
 (def unpad (partial remove-padding PADDING))
+
+(def encrypt-base (partial otp KEY))
+(def encrypt (comp encrypt-base pad))
+(def decrypt (comp unpad encrypt-base))
 
 (defn -main []
     (let [message (read-line)
