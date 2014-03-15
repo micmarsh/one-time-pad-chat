@@ -1,33 +1,23 @@
 (ns otpclj.core
-    (:use [crypto.random :only [base64]]))
-
-(def to-ints (partial map int))
+    (:use [crypto.random :only [base64]]
+          [otpclj.encrypt :only [otp]]
+          [otpclj.utils :only [to-ints]]
+          [otpclj.padding :only [add-padding remove-padding]]))
 
 (def KEY (-> 200 base64 to-ints))
+(def PADDING (-> 200 base64 to-ints))
 
-(defn add-padding [message pad]
-    (let [length (count message)
-          padding (drop length pad)]
-        (concat message padding)))
+(def encrypt (partial otp KEY))
+(def decrypt encrypt)
 
-(defn remove-padding [message pad]
-    (let [rmsg (reverse message)
-          rpad (reverse pad)]))
-
-(defn otp [key message]
-    (let [padding (-> key count base64 to-ints)
-          key-ints (to-ints key)
-          msg-ints (to-ints message)
-          full-msg (add-padding msg-ints padding)
-          encrypted (map (comp char bit-xor) key-ints full-msg) ]
-        (apply str encrypted)))
+(def pad (partial add-padding PADDING))
+(def unpad (partial remove-padding PADDING))
 
 (defn -main []
     (let [message (read-line)
-          encrypt (partial otp KEY)
-          decrypt encrypt
-          encrypted (encrypt message)]
+          encrypted (encrypt message)
+          decrypted (-> encrypted decrypt unpad)]
         (println "your message:" message)
         (println "encrypted:" encrypted)
-        (println "decrypted:" (decrypt encrypted))
+        (println "decrypted:" decrypted)
         (recur)))
