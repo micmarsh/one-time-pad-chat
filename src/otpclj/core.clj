@@ -1,16 +1,18 @@
 (ns otpclj.core
-    (:use [otpclj.constants :only [KEYS PADDING]]
+    (:use [otpclj.constants :only [KEYS PADDINGS]]
           [otpclj.encrypt :only [otp]]
           [otpclj.padding :only [add-padding remove-padding]]))
 
-(def pad (partial add-padding PADDING))
-(def unpad (partial remove-padding PADDING))
-
-(defn -main []
-    (loop [keys KEYS]
+(defn main-loop []
+    (loop [keys KEYS
+           paddings PADDINGS]
         (if (empty? keys)
             (println "you're all out of encryption keys!")
-            (let [encrypt-base (partial otp (first keys))
+            (let [current-padding (first paddings)
+                  pad (partial add-padding current-padding)
+                  unpad (partial remove-padding current-padding)
+
+                  encrypt-base (partial otp (first keys))
                   encrypt (comp encrypt-base pad)
                   decrypt (comp unpad encrypt-base)
 
@@ -20,4 +22,6 @@
                 (println "your message:" message)
                 (println "encrypted:" encrypted)
                 (println "decrypted:" decrypted)
-                (recur (rest keys))))))
+                (recur (rest keys) (rest paddings))))))
+
+(def -main main-loop)

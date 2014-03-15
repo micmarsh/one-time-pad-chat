@@ -9,6 +9,6 @@
             (list element)
             (cons (base64 key-length) (lazy-seq (fake-constants (dec n)))))))
 
-(def PADDING (base64 key-length))
+(def PADDINGS (fake-constants 3))
 (def KEYS (fake-constants 3))
 
