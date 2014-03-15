@@ -1,14 +1,12 @@
-# otpclj
+# One Time Pad Chat
 
-A Clojure library designed to ... well, that part is up to you.
+[One Time Pads](https://en.wikipedia.org/wiki/One_time_pad) are super cool, but not very practical. This project aims to be super cool, and mildly practical.
 
-## Usage
-
-FIXME
+IDK crypto in any real sense, so don't you shouldn't this to chat with your homies Julian, Edward, or Glenn.
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Michael Marsh
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
