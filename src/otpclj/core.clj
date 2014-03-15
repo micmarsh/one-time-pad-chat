@@ -34,11 +34,17 @@
    [ "-m" "--max-messages NUMBER" "The maximum amount of messages this set of keys will be allowed to send, used for generating keys and paddings"
     :default 1000
     :parse-fn parse-int]
+   ["-f" "--file FILENAME" "The name of the file containing the keys and paddings"
+    :default "keys.txt"]
   ])
+
+(defn generate? [{:keys [arguments]}]
+    (some #{"generate"} arguments))
 
 (def parse-args #(parse-opts % cli-options))
 
 (defn -main [& args]
   (let [options (parse-args args)]
-    (println (:options options))
-    (println (:arguments options))))
+    (if (generate? options)
+      (println "time to generate!")
+      (main-loop))))
