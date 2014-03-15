@@ -1,7 +1,8 @@
 (ns otpclj.core
     (:use [otpclj.chat :only [main-loop]]
           [otpclj.generate :only [generate-constants]]
-          [clojure.tools.cli :only [parse-opts]]))
+          [clojure.tools.cli :only [parse-opts]])
+    (:gen-class))
 
 (def parse-int #(Integer/parseInt %))
 
