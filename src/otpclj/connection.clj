@@ -6,16 +6,17 @@
     (let [last-messsage (atom nil)
           done (chan)
           ^WebSocketClient socket (proxy [WebSocketClient] 
-            [(java.net.URI. where)]
-            (onOpen [data] 
-                (println "opened socket!")
-                (put! done true))
-            (onClose [code reason remote] (println "closed socket because" reason))
-            (onMessage [message]
-                (when 
-                    (not (= message @last-messsage)) 
-                        (put! incoming message)))
-            (onError [exception] (println "hey socket error")))]
+                [(java.net.URI. where)]
+                (onOpen [data] 
+                    (println "opened socket!")
+                    (put! done true))
+                (onClose [code reason remote] (println "closed socket because" reason))
+                (onMessage [message]
+                    ; (println "received a message" message)
+                    (when 
+                        (not (= message @last-messsage)) 
+                            (put! incoming message)))
+                (onError [exception] (println "hey socket error")))]
         (.connect socket)
         (<!! done)
         (fn [message]
