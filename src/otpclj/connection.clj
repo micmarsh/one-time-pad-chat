@@ -27,5 +27,3 @@
             (let [message (<! outgoing)]
                 (send! message))))
         incoming))
-
-
