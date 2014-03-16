@@ -5,14 +5,14 @@
 
 (def ECHO_URL "ws://echo.websocket.org")
 
-(def outgoing (chan))
+; (def outgoing (chan))
 
-(def echo (c/connect! ECHO_URL outgoing))
+; (def echo (c/connect! ECHO_URL outgoing))
 
-(put! outgoing "hey")
-(put! outgoing "what's up")
+; (put! outgoing "hey")
+; (put! outgoing "what's up")
 
-(fact "reads things back from echo"
-    (<!! echo) => "hey"
-    (<!! echo) => "what's up")
-    
+; (fact "reads things back from echo"
+;     (<!! echo) => "hey"
+;     (<!! echo) => "what's up")
+;     
