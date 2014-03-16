@@ -22,3 +22,17 @@
     (padding/remove-padding "padding" "running") => "runn"
     (padding-id "word") => "word"
     (padding-id (range 5)) => (-> 5 range utils/to-string))
+
+(def encrypted (encrypt/otp "the key" "the msg"))
+
+(fact "xor and otp work as expected"
+    (encrypt/xor-all (range 10) (range 10)) => (->> 0 repeat (take 10))
+    (encrypt/xor-all (range 9) (range 9 18)) => [9 11 9 15 9 11 9 23 25]
+    (encrypt/otp "a key" "a msg") =not=> "a msg"
+    (encrypt/otp "the key" encrypted) => "the msg"
+    (encrypt/otp "key" "message") => (encrypt/otp "key" "mes"))
+
+; (def encrypted1 (encrypt/otp "the key" "hey hey"))
+
+; (fact "otp can be cracked if a key is re-used"
+;     )
