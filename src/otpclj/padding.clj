@@ -4,7 +4,7 @@
 (defn add-padding [padding message]
     (let [length (count message)
           pad (drop length padding)]
-        (concat message pad)))
+        (-> message (concat pad) to-string)))
 
 (defn remove-padding [pad msg]
   (loop [padding (reverse pad) 
