@@ -3,11 +3,17 @@
 
 ; TODO hook up to random.org like a baws
 
+(defn make-str [length]
+  (->> length
+      base64
+      (take length)
+      (apply str)))
+
 (defn fake-constants [n key-length]
-    (let [element (base64 key-length)]
+    (let [element (make-str key-length)]
         (if (<= n 1)
             (list element)
-            (cons (base64 key-length) 
+            (cons (make-str key-length) 
                 (lazy-seq (fake-constants (dec n) key-length))))))
 
 (defn generate-constants [options]

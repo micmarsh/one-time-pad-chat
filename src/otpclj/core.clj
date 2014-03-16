@@ -33,6 +33,7 @@
   (try
     (let [filename (:file options)
           loop-args (file-to-args filename)]
+        (println filename "!!!!!!!!!!!!")
         (apply main-loop loop-args))
     (catch java.io.FileNotFoundException e 
         (println 
