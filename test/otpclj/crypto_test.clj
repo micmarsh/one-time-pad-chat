@@ -30,6 +30,8 @@
     (c/otp "the key" encrypted) => "the msg"
     (c/otp "key" "message") => (c/otp "key" "mes"))
 
+(fact "methods")
+
 ; (def encrypted1 (c/otp "the key" "hey hey"))
 
 ; (fact "otp can be cracked if a key is re-used"

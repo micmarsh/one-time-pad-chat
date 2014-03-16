@@ -14,7 +14,6 @@
 
         (go-loop [keys KEYS paddings PADDINGS]
             (let [message (<! incoming)
-                  n (println "decrypting with:" (first keys) )
                   decrypt (make-decryptor (first keys) (first paddings))]
                 (-> message decrypt show-received))
             (recur (rest keys) (rest paddings)))
@@ -25,10 +24,7 @@
             (if (empty? keys)
                 (println "you're all out of encryption keys!")
                 (let [message (read-line)
-
-                  n (println "encrypting with:" (first keys) )
-
                       encrypt (make-encryptor (first keys) (first paddings))
                       encrypted (encrypt message)]
-                    (put! outgoing message)
+                    (put! outgoing encrypted)
                     (recur (rest keys) (rest paddings)))))))
