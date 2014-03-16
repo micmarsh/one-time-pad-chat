@@ -15,7 +15,6 @@
 (defn main-loop [KEYS PADDINGS]
 
     (go-loop [keys KEYS paddings PADDINGS]
-        (println "inside go loop")
         (let [message (<! incoming)
               {:keys [decrypt]}
                   (crypto-fns (first keys) (first paddings))]
@@ -30,6 +29,5 @@
                             (crypto-fns (first keys) (first paddings))
                       message (read-line)
                       encrypted (encrypt message)]
-                    (println "you say:" message)
                     (send-message encrypted)
                     (recur (rest keys) (rest paddings))))))
