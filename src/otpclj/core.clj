@@ -41,7 +41,7 @@
 (defn -main [& args]
   (let [arguments (parse-args args)
         options (:options arguments)
-        run (if (generate? arguments) 
+        run-app (if (generate? arguments) 
                   (comp prn generate-constants)
                   (comp start-client chat-args))]
-    (run options)))
+    (run-app options)))
