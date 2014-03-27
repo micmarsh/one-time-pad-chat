@@ -13,9 +13,9 @@
   :plugins [[lein-midje "3.0.0"]]
 
    ;; uberjar
+  :uberjar-name "otp-chat.jar"
   :aot :all
   :omit-source true
-
 
 
   :main otpclj.core)

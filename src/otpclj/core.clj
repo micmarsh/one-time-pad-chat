@@ -1,5 +1,5 @@
 (ns otpclj.core
-    (:use [otpclj.chat :only [main-loop]]
+    (:use [otpclj.chat :only [start-loops]]
           [otpclj.generate :only [generate-constants]]
           [clojure.tools.cli :only [parse-opts]])
     (:gen-class))
@@ -15,6 +15,8 @@
     :parse-fn parse-int]
    ["-f" "--file FILENAME" "The name of the file containing the keys and paddings"
     :default "keys.txt"]
+   ["-r" "--room ROOMNAME" "Where to connect to (only 2 allowed per room)"
+    :default "default"]
   ])
 
 (def parse-args #(parse-opts % cli-options))
@@ -25,16 +27,15 @@
 (defn read-file [name]
   (-> name slurp read-string))
 
-(defn file-to-args [name]
-  (let [things (read-file name)]
-    [(:keys things) (:paddings things)]))
+(defn file-to-args [file]
+    [(:keys file) (:paddings file)])
 
 (defn start-chat [options]
   (try
     (let [filename (:file options)
-          loop-args (file-to-args filename)]
-        (println filename "!!!!!!!!!!!!")
-        (apply main-loop loop-args))
+          room (:room options)
+          loop-args (-> filename read-file file-to-args (concat [room]))]
+        (apply start-loops loop-args))
     (catch java.io.FileNotFoundException e 
         (println 
           (str "The the file \"" 
