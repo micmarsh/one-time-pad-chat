@@ -30,14 +30,15 @@
               :incoming incoming
             })))
 
-(defn append [string end]
+(defn append-if-needed [string end]
     (if (= end (last string))
         string
         (str string end)))
 
 (defn start-client [{:keys [paddings keys room server]}]
     (let [outgoing (chan)
-          incoming (connect! (str (append server \/) room) outgoing)]
+          real-server (append-if-needed server \/)
+          incoming (connect! (str real-server room) outgoing)]
         (start-receiver {
             :keys keys
             :paddings paddings 
