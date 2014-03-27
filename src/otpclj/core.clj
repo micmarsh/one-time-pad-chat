@@ -28,20 +28,25 @@
   (-> name slurp read-string))
 
 (defn chat-args [options]
-  (try
-    (let [filename (:file options)
-          {:keys [keys paddings]} (read-file filename)]
-        (assoc options :keys keys
-                       :paddings paddings))
-    (catch java.io.FileNotFoundException e 
-        (println 
-          (str "The the file \"" 
-            (:file options) "\" doesn't exist")))))
+  (let [filename (:file options)
+        {:keys [keys paddings]} (read-file filename)]
+      (assoc options :keys keys
+                     :paddings paddings)))
 
-(defn -main [& args]
+(defn catch-errors [function]
+    (fn [& args]
+        (try
+            (apply function args)
+        (catch java.io.FileNotFoundException e 
+          (println 
+            (str "The specified file doesn't exist"))))))
+
+(defn main [& args]
   (let [arguments (parse-args args)
         options (:options arguments)
         run-app (if (generate? arguments) 
                   (comp prn generate-constants)
                   (comp start-client chat-args))]
     (run-app options)))
+
+(def -main (catch-errors main))
