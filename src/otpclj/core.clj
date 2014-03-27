@@ -1,5 +1,5 @@
 (ns otpclj.core
-    (:use [otpclj.chat :only [start-loops]]
+    (:use [otpclj.chat :only [start-client]]
           [otpclj.generate :only [generate-constants]]
           [clojure.tools.cli :only [parse-opts]])
     (:gen-class))
@@ -35,7 +35,7 @@
     (let [filename (:file options)
           room (:room options)
           loop-args (-> filename read-file file-to-args (concat [room]))]
-        (apply start-loops loop-args))
+        (apply start-client loop-args))
     (catch java.io.FileNotFoundException e 
         (println 
           (str "The the file \"" 

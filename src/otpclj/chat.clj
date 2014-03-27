@@ -21,7 +21,7 @@
               :outgoing outgoing
             }))))
 
-(defn start-loops [KEYS PADDINGS room]
+(defn start-client [KEYS PADDINGS room]
     (let [outgoing (chan)
           incoming (connect! (str CHAT_SERVER room) outgoing)]
 
