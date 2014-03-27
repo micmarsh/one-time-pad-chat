@@ -27,9 +27,6 @@
 (defn read-file [name]
   (-> name slurp read-string))
 
-(defn file-to-args [file]
-    [(:keys file) (:paddings file)])
-
 (defn chat-args [options]
   (try
     (let [filename (:file options)
