@@ -21,21 +21,31 @@
               :outgoing outgoing
             }))))
 
-(defn start-client [KEYS PADDINGS room]
+(defn start-receiver [arg-map]
+    (go-loop [{:keys [keys paddings incoming]} arg-map]
+        (let [message (<! incoming)
+              decrypt (make-decryptor (first keys) (first paddings))]
+          (-> message decrypt show-received))
+            (recur {
+              :keys keys
+              :paddings paddings 
+              :incoming incoming
+            })))
+
+(defn start-client [{:keys [paddings keys room]}]
     (let [outgoing (chan)
           incoming (connect! (str CHAT_SERVER room) outgoing)]
-
-        (go-loop [keys KEYS paddings PADDINGS]
-            (let [message (<! incoming)
-                  decrypt (make-decryptor (first keys) (first paddings))]
-                (-> message decrypt show-received))
-            (recur (rest keys) (rest paddings)))
+        (start-receiver {
+            :keys keys
+            :paddings paddings 
+            :incoming incoming
+          })
 
         (println (str "Welcome to OTPChat!\n"
                       "This is still very much alpha software, with plenty of bugs and UX/UI issues\n"
                       "Start typing to say hi to whoever's (possibly) on the other end.\n"))
         (main-loop {
-          :keys KEYS
-          :paddings PADDINGS
+          :keys keys
+          :paddings paddings
           :outgoing outgoing
           })))

@@ -30,12 +30,12 @@
 (defn file-to-args [file]
     [(:keys file) (:paddings file)])
 
-(defn start-chat [options]
+(defn chat-args [options]
   (try
     (let [filename (:file options)
-          room (:room options)
-          loop-args (-> filename read-file file-to-args (concat [room]))]
-        (apply start-client loop-args))
+          {:keys [keys paddings]} (read-file filename)]
+        (assoc options :keys keys
+                       :paddings paddings))
     (catch java.io.FileNotFoundException e 
         (println 
           (str "The the file \"" 
@@ -46,4 +46,4 @@
         options (:options arguments)]
     (if (generate? arguments)
       (-> options generate-constants prn)
-      (start-chat options))))
+      (-> options chat-args start-client))))
