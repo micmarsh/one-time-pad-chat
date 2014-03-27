@@ -6,8 +6,6 @@
 (defn show-received [message]
     (println "they say:" message))
 
-(def CHAT_SERVER "ws://localhost:8080/chat/");"ws://chitty-chatty.herokuapp.com/chat/asss")
-
 (defn main-loop [{:keys [keys paddings outgoing]}]
     (if (empty? keys)
         (println "you're all out of encryption keys!")
@@ -32,9 +30,14 @@
               :incoming incoming
             })))
 
-(defn start-client [{:keys [paddings keys room]}]
+(defn append [string end]
+    (if (= end (last string))
+        string
+        (str string end)))
+
+(defn start-client [{:keys [paddings keys room server]}]
     (let [outgoing (chan)
-          incoming (connect! (str CHAT_SERVER room) outgoing)]
+          incoming (connect! (str (append server \/) room) outgoing)]
         (start-receiver {
             :keys keys
             :paddings paddings 

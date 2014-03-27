@@ -17,6 +17,8 @@
     :default "keys.txt"]
    ["-r" "--room ROOMNAME" "Where to connect to (only 2 allowed per room)"
     :default "default"]
+   ["-s" "--server SERVER" "The server to connect to, useful for purely local testing"
+    :default "ws://chitty-chatty.herokuapp.com/chat/"]
   ])
 
 (def parse-args #(parse-opts % cli-options))
@@ -35,8 +37,7 @@
 
 (defn catch-errors [function]
     (fn [& args]
-        (try
-            (apply function args)
+        (try (apply function args)
         (catch java.io.FileNotFoundException e 
           (println 
             (str "The specified file doesn't exist"))))))
