@@ -27,8 +27,8 @@
               decrypt (make-decryptor (first keys) (first paddings))]
           (-> message decrypt show-received))
             (recur {
-              :keys keys
-              :paddings paddings 
+              :keys (rest keys)
+              :paddings (rest paddings) 
               :incoming incoming
             })))
 
